@@ -98,6 +98,7 @@ namespace NPoco.Expressions
         }
 
         private string sep = string.Empty;
+        private char EscapeChar = '\\';
         private PocoData _pocoData;
         private readonly IDatabase _database;
         private readonly DatabaseType _databaseType;
@@ -1603,13 +1604,13 @@ namespace NPoco.Expressions
                     statement = string.Format("lower({0})", expression);
                     break;
                 case "StartsWith":
-                    statement = string.Format("upper({0}) like {1}", expression, CreateParam(args[0].ToString().ToUpper() + "%"));
+                    statement = string.Format("upper({0}) like {1} ESCAPE'{2}'", expression, CreateParam(EscapeParam(args[0]) + "%"), EscapeChar);
                     break;
                 case "EndsWith":
-                    statement = string.Format("upper({0}) like {1}", expression, CreateParam("%" + args[0].ToString().ToUpper()));
+                    statement = string.Format("upper({0}) like {1} ESCAPE'{2}'", expression, CreateParam("%" + EscapeParam(args[0])), EscapeChar);
                     break;
                 case "Contains":
-                    statement = string.Format("upper({0}) like {1}", expression, CreateParam("%" + args[0].ToString().ToUpper() + "%"));
+                    statement = string.Format("upper({0}) like {1} ESCAPE'{2}'", expression, CreateParam("%" + EscapeParam(args[0]) + "%"), EscapeChar);
                     break;
                 case "Substring":
                     var startIndex = Int32.Parse(args[0].ToString()) + 1;
@@ -1627,6 +1628,12 @@ namespace NPoco.Expressions
             }
 
             return new PartialSqlString(statement);
+        }
+
+        protected string EscapeParam(object par)
+        {
+            var param = par.ToString().ToUpper();
+            return param.Replace("_", EscapeChar + "_"); 
         }
 
         // Easy to override

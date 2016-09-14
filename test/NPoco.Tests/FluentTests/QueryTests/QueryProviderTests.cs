@@ -10,7 +10,7 @@ namespace NPoco.Tests.FluentTests.QueryTests
     [TestFixture]
     public class QueryProviderTests : BaseDBFuentTest
     {
-        [Test]
+       [Test]
         public void QueryAllData()
         {
             var users = Database.Query<User>().ToList();
@@ -521,6 +521,13 @@ namespace NPoco.Tests.FluentTests.QueryTests
             var queryBuilder = new QueryBuilder<User>().Where(x => x.UserId == 1);
             var user = Database.Query<User>().From(queryBuilder).Single();
             Assert.AreEqual(1, user.UserId);
+        }
+
+        [Test]
+        public void QueryWithWhereContainsStartsWithUnderscore()
+        {
+            var houses = Database.Query<House>().Where(o => o.Address.StartsWith("_")).ToList();
+            Assert.AreEqual(1, houses.Count);
         }
 
         //[Test]
