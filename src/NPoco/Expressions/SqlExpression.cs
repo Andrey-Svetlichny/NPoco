@@ -1633,7 +1633,9 @@ namespace NPoco.Expressions
         protected string EscapeParam(object par)
         {
             var param = par.ToString().ToUpper();
-            return param.Replace("_", EscapeChar + "_"); 
+            param = param.Replace(EscapeChar.ToString(), EscapeChar.ToString() + EscapeChar)
+                .Replace("_", EscapeChar + "_");
+            return param;
         }
 
         // Easy to override

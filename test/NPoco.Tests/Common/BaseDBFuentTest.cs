@@ -139,7 +139,7 @@ namespace NPoco.Tests.Common
 
             Database.Insert(new House
                 {
-                    Address = "_ Road Street, Suburb"
+                    Address = "_ Road\\Street, Suburb"
                 }
             );
 
